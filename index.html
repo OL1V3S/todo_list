@@ -1,0 +1,26 @@
+<!-- Tells browser we're using html-->
+<!DOCTYPE html>
+
+<!-- Tells browser language is english-->
+<html lang="en">
+    <head> <!--Where you put metadata and resources-->
+
+        <meta charset="UTF-8" /> <!--Character set used by page, UTF-8 supports letters, #'s, special symbols, and emojis'-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!--Responsive with different screen sizes-->
+        <title>To-Do List</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+
+    <!--All visible content in the page is in body-->
+    <body>
+        <div class="container">
+            <h1>To-Do List</h1>
+            <div class="input-section">
+                <input type="text" id="task-input" placeholder="Enter a task..."/> <!--input makes a text box-->
+                <button id="add-task-btn">Add</button>
+            </div>
+            <ul id="task-list"></ul> <!--ul means unordered list where the tasks go-->
+        </div>
+        <script src="script.js"></script> <!--src means run this js file after you run the html (we run this after so the objects exist)-->
+    </body>
+</html>
