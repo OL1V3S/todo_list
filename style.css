@@ -3,8 +3,8 @@
 
 /* Body */
 body {
-  font-family: Snell Roundhand;
-  background-color: #800000;
+  font-family: Courier;
+  background-color: #1F3D2B;
   display: flex;
   justify-content: center; /* Centers horizontally */
   align-items: center; /* Centers vertically */
@@ -13,7 +13,7 @@ body {
 
 /* Container */
 .container {
-  background-color: #008060;
+  background-color: #6BB59A;
   padding: 20px;
   border-radius: 40px; /* Rounded corners */
   box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Adds soft drop shadow */
@@ -82,7 +82,8 @@ h1 { text-align: center; margin-bottom: 15px; color: white; }
     opacity: .5;
 }
 
-/*TEMPORARY ADDITION (SNOWFLAKES)*/
+/*SNOWFLAKES*/
+/*
 .snow {
   position: fixed;
   width: 100%;
@@ -109,4 +110,5 @@ h1 { text-align: center; margin-bottom: 15px; color: white; }
     transform: translateY(110vh);
   }
 }
+*/
 

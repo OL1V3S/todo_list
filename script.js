@@ -73,15 +73,15 @@ function renderTasks() {
 
 }
 
-// ========== FALLING SNOW ==========
-const snowContainer = document.querySelector('.snow');
+// // ========== FALLING SNOW ==========
+// const snowContainer = document.querySelector('.snow');
 
-for (let i = 0; i < 70; i++) {
-  const flake = document.createElement('span');
-  flake.style.left = Math.random() * 100 + "vw";
-  flake.style.animationDuration = (3 + Math.random() * 5) + "s";
-  flake.style.opacity = Math.random();
-  flake.style.width = flake.style.height = (5 + Math.random() * 10) + "px";
-  snowContainer.appendChild(flake);
-}
+// for (let i = 0; i < 70; i++) {
+//   const flake = document.createElement('span');
+//   flake.style.left = Math.random() * 100 + "vw";
+//   flake.style.animationDuration = (3 + Math.random() * 5) + "s";
+//   flake.style.opacity = Math.random();
+//   flake.style.width = flake.style.height = (5 + Math.random() * 10) + "px";
+//   snowContainer.appendChild(flake);
+// }
 
