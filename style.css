@@ -807,8 +807,8 @@ h1 {
 /* Phones: keep sky and treeline visible around the panel */
 @media (max-width: 480px) {
   body {
-    padding: 26px 18px 120px;
-    align-items: flex-start;
+    padding: 26px 18px;
+    align-items: center;
   }
 
 
