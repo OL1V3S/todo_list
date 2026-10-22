@@ -10,6 +10,9 @@ const filterButtons = document.querySelectorAll(".filter-btn");
 let currentFilter = "all";
 let tasks = loadTasks();
 let isDragging = false;
+let editingId = null;
+let lastPointerType = "mouse";
+let touchDrag = null;
 
 // Display saved tasks when the page first loads.
 renderTasks();
@@ -66,12 +69,22 @@ function renderTasks() {
     visibleTasks.forEach((task) => {
         const li = document.createElement("li");
         li.dataset.id = task.id;
-        li.draggable = true;
+        li.draggable = task.id !== editingId;
         li.classList.toggle("completed", task.completed);
         li.addEventListener("click", () => {
             if (!isDragging) toggleTask(task.id);
         });
+        li.addEventListener("pointerdown", (event) => startTouchDrag(event, li));
+        li.addEventListener("contextmenu", (event) => {
+            if (lastPointerType === "touch") event.preventDefault();
+        });
         li.addEventListener("dragstart", (event) => {
+            // Touch uses the long-press drag below instead of the native drag.
+            if (lastPointerType === "touch") {
+                event.preventDefault();
+                return;
+            }
+
             isDragging = true;
             li.classList.add("dragging");
             event.dataTransfer.effectAllowed = "move";
@@ -100,9 +113,31 @@ function renderTasks() {
         });
         checkbox.addEventListener("change", () => toggleTask(task.id));
 
-        const text = document.createElement("span");
-        text.className = "task-text";
-        text.textContent = task.text;
+        let text;
+        if (task.id === editingId) {
+            // Swap the label for an input while this task is being edited.
+            text = document.createElement("input");
+            text.type = "text";
+            text.className = "task-edit-input";
+            text.value = task.text;
+            text.maxLength = 120;
+            text.setAttribute("aria-label", "Edit task");
+            text.addEventListener("click", (event) => event.stopPropagation());
+            text.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") finishEdit(true, text.value);
+                if (event.key === "Escape") finishEdit(false);
+            });
+            text.addEventListener("blur", () => finishEdit(true, text.value));
+        } else {
+            text = document.createElement("span");
+            text.className = "task-text";
+            text.textContent = task.text;
+        }
+
+        const editBtn = createIconButton("\u270E", `Edit ${task.text}`, () => {
+            editingId = task.id;
+            renderTasks();
+        });
 
         const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "Delete";
@@ -116,12 +151,122 @@ function renderTasks() {
             renderTasks();
         });
 
-        li.append(checkbox, text, deleteBtn);
+        const actions = document.createElement("div");
+        actions.className = "task-actions";
+        actions.append(editBtn, deleteBtn);
+
+        li.append(checkbox, text, actions);
         taskList.appendChild(li);
+
+        if (task.id === editingId) {
+            text.focus();
+            text.select();
+        }
     });
 
     updateSummary(visibleTasks.length);
 }
+
+// Build a small icon button that does not toggle the task row.
+function createIconButton(label, ariaLabel, onClick) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "icon-btn";
+    button.textContent = label;
+    button.setAttribute("aria-label", ariaLabel);
+    button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        onClick();
+    });
+    return button;
+}
+
+// Finish editing a task, keeping the old text if the new one is empty.
+function finishEdit(shouldSave, newText = "") {
+    if (editingId === null) return;
+
+    const task = tasks.find((savedTask) => savedTask.id === editingId);
+    editingId = null;
+
+    if (shouldSave && task && newText.trim() !== "") {
+        task.text = newText.trim();
+        saveTasks();
+    }
+
+    renderTasks();
+}
+
+// Hold a task for a moment on a touch screen, then drag it up or down.
+function startTouchDrag(event, li) {
+    lastPointerType = event.pointerType;
+
+    if (event.pointerType !== "touch" || editingId !== null) return;
+    if (event.target.closest("button, input")) return;
+
+    const state = {
+        li,
+        startX: event.clientX,
+        startY: event.clientY,
+        active: false,
+        timer: null
+    };
+
+    state.timer = setTimeout(() => {
+        state.active = true;
+        isDragging = true;
+        li.classList.add("dragging");
+        if (navigator.vibrate) navigator.vibrate(15);
+    }, 350);
+
+    touchDrag = state;
+}
+
+taskList.addEventListener("pointermove", (event) => {
+    if (!touchDrag) return;
+
+    if (!touchDrag.active) {
+        // Moving before the hold finishes means the user is scrolling.
+        const moved = Math.hypot(event.clientX - touchDrag.startX, event.clientY - touchDrag.startY);
+        if (moved > 8) {
+            clearTimeout(touchDrag.timer);
+            touchDrag = null;
+        }
+        return;
+    }
+
+    const nextTask = getDragTarget(event.clientY);
+    if (nextTask) {
+        taskList.insertBefore(touchDrag.li, nextTask);
+    } else {
+        taskList.appendChild(touchDrag.li);
+    }
+});
+
+function endTouchDrag() {
+    if (!touchDrag) return;
+
+    clearTimeout(touchDrag.timer);
+    const wasActive = touchDrag.active;
+    touchDrag.li.classList.remove("dragging");
+    touchDrag = null;
+
+    if (wasActive) {
+        saveVisibleTaskOrder();
+
+        // Wait until the release's click event finishes before enabling clicks.
+        setTimeout(() => {
+            isDragging = false;
+        }, 0);
+    }
+}
+
+taskList.addEventListener("pointerup", endTouchDrag);
+taskList.addEventListener("pointercancel", endTouchDrag);
+
+// Stop the page from scrolling while a task is being dragged.
+taskList.addEventListener("touchmove", (event) => {
+    if (touchDrag && touchDrag.active) event.preventDefault();
+}, { passive: false });
 
 // Move the dragged row as the pointer crosses other tasks.
 taskList.addEventListener("dragover", (event) => {
@@ -226,5 +371,25 @@ function loadTasks() {
     } catch (error) {
         console.error("Could not load saved tasks:", error);
         return [];
+    }
+}
+
+
+// Scatter pixel leaves that fall behind the app
+const leavesLayer = document.querySelector(".leaves");
+const leafColors = ["#e8743b", "#f4b860", "#b8431f", "#c98a2b", "#7a8a3a"];
+
+if (leavesLayer && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    for (let i = 0; i < 22; i++) {
+        const leaf = document.createElement("span");
+        leaf.className = "leaf";
+        leaf.style.left = `${Math.random() * 100}%`;
+        leaf.style.setProperty("--size", `${12 + Math.floor(Math.random() * 3) * 4}px`);
+        leaf.style.setProperty("--leaf-color", leafColors[i % leafColors.length]);
+        leaf.style.setProperty("--fall", `${9 + Math.random() * 9}s`);
+        leaf.style.setProperty("--sway", `${2.5 + Math.random() * 2}s`);
+        leaf.style.setProperty("--tilt", `${Math.floor(Math.random() * 90) - 45}deg`);
+        leaf.style.setProperty("--delay", `${-Math.random() * 18}s`);
+        leavesLayer.appendChild(leaf);
     }
 }
