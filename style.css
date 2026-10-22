@@ -370,14 +370,6 @@ input:focus-visible {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  h1::after,
-  * {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-
 /* Comic / Spider-Verse inspired touches: halftone dots, misregistered color, hard shadows */
 body::before {
   content: "";
@@ -490,12 +482,6 @@ h1 {
   right: 0;
   height: 6px;
   background: repeating-linear-gradient(-45deg, var(--brown) 0 4px, transparent 4px 8px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  h1 {
-    animation: none;
-  }
 }
 
 /* Autumn night city: harvest moon, pixel skyline, comic speed lines */

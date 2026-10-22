@@ -379,7 +379,7 @@ function loadTasks() {
 const leavesLayer = document.querySelector(".leaves");
 const leafColors = ["#e8743b", "#f4b860", "#b8431f", "#c98a2b", "#7a8a3a"];
 
-if (leavesLayer && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+if (leavesLayer) {
     for (let i = 0; i < 22; i++) {
         const leaf = document.createElement("span");
         leaf.className = "leaf";
