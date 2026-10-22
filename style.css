@@ -577,19 +577,44 @@ body::before {
 body {
   background-color: #2a1a2e;
   background-image:
-    radial-gradient(circle at 70% 78%, rgba(255, 190, 90, 0.38) 0 70px, transparent 71px),
+    radial-gradient(1.5px 1.5px at 12% 6%, #ffe8c4 99%, transparent),
+    radial-gradient(1.5px 1.5px at 28% 14%, #ffe8c4 99%, transparent),
+    radial-gradient(1.5px 1.5px at 46% 5%, #ffe8c4 99%, transparent),
+    radial-gradient(1.5px 1.5px at 63% 11%, #ffe8c4 99%, transparent),
+    radial-gradient(1.5px 1.5px at 81% 7%, #ffe8c4 99%, transparent),
+    radial-gradient(1.5px 1.5px at 92% 17%, #ffe8c4 99%, transparent),
+    radial-gradient(1.5px 1.5px at 19% 22%, #ffe8c4 99%, transparent),
+    radial-gradient(1.5px 1.5px at 71% 24%, #ffe8c4 99%, transparent),
+    radial-gradient(1.5px 1.5px at 38% 20%, #ffe8c4 99%, transparent),
+    radial-gradient(circle at 74% calc(100% - 150px), #f2a65a 0 46px, rgba(242, 166, 90, 0.32) 47px 74px, rgba(242, 166, 90, 0.14) 75px 110px, transparent 111px),
     linear-gradient(
       to bottom,
-      #16224f 0%,
-      #16224f 22%,
-      #4a1f3c 22%,
-      #4a1f3c 40%,
-      #7a2e3a 40%,
-      #7a2e3a 56%,
-      #b8502c 56%,
-      #b8502c 70%,
-      #e39040 70%,
-      #e39040 100%
+      #0e1535 0%,
+      #0e1535 12%,
+      #141d44 12%,
+      #141d44 24%,
+      #1b2150 24%,
+      #1b2150 34%,
+      #2c2160 34%,
+      #2c2160 43%,
+      #43245e 43%,
+      #43245e 51%,
+      #5f2a5c 51%,
+      #5f2a5c 58%,
+      #7f3158 58%,
+      #7f3158 65%,
+      #a03b52 65%,
+      #a03b52 72%,
+      #bd4a48 72%,
+      #bd4a48 79%,
+      #cf5f40 79%,
+      #cf5f40 86%,
+      #d97a3a 86%,
+      #d97a3a 93%,
+      #8f4a2a 93%,
+      #8f4a2a 100%,
+      #4a2a22 100%,
+      #4a2a22 100%
     );
   background-attachment: scroll;
   image-rendering: auto;
@@ -648,7 +673,7 @@ h1 {
 /* Spider-Verse comic touches (back on top of the calm dusk) */
 body::before {
   background-image:
-    radial-gradient(rgba(20, 8, 6, 0.4) 28%, transparent 30%),
+    radial-gradient(rgba(20, 8, 6, 0.28) 28%, transparent 30%),
     radial-gradient(ellipse at center, rgba(20, 10, 8, 0.05) 0%, rgba(10, 4, 8, 0.4) 100%);
   background-size: 8px 8px, 100% 100%;
   -webkit-mask: linear-gradient(to bottom, transparent 10%, #000 100%);
