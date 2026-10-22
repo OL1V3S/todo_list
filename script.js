@@ -377,7 +377,7 @@ function loadTasks() {
 
 // Scatter pixel leaves that fall behind the app
 const leavesLayer = document.querySelector(".leaves");
-const leafColors = ["#e8743b", "#f4b860", "#b8431f", "#c98a2b", "#7a8a3a"];
+const leafColors = ["#e8743b", "#f4b860", "#b8431f", "#3f86d8", "#7a8a3a"];
 
 if (leavesLayer) {
     for (let i = 0; i < 22; i++) {
